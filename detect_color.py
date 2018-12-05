@@ -30,7 +30,7 @@ class detect_color(object):
     #open camera and return frame
     def open_camera(self):
         ret, self.frame = self.cap.read()
-        cv2.imshow('real',self.frame)
+        self.frame = cv2.flip(self.frame,1)
         return self.frame
 
     #calc new HSV boundaries from area between 2 mouse click and plus/minus weight to lowest and highest
@@ -79,6 +79,9 @@ class detect_color(object):
         [np.clip(self.hmax+ weight,0,255), np.clip(self.smax+ weight,0,255),np.clip(self.vmax+ weight,0,255)])
         ]
         print(self.color_boundaries)
+    def open_cv_window(self):
+        cv2.imshow('real',self.frame)
+        self.checkmouse()
 
     # collect location of mouse click
     def click_event(self,event, x, y, flags, param):
@@ -114,13 +117,28 @@ class detect_color(object):
             
             mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_open)
             mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel_close)
-            
+            #mask = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
+
             output = cv2.bitwise_and(frame, frame, mask = mask)
             output_color_detec = cv2.cvtColor(output, cv2.COLOR_HSV2BGR)
             output_color_detec = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
             #ret,output_color_detec = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
             return output_color_detec
-       
+    def center(self,frame):
+        ret,thresh = cv2.threshold(frame,80,255,cv2.THRESH_BINARY)
+        im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        cv2.drawContours(frame, contours, -1, (0,255,0), 3)
+        M = cv2.moments(thresh)
+        try:
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+            cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+            cv2.putText(frame, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            print("find")
+        except:
+            print("not find")
+            pass  
+        return frame
 ''' 
 -----------------------------------------Example Code-----------------------------------------------
 import cv2
@@ -134,7 +152,7 @@ while(1):
     detectcolor.auto = False
     detectcolor.checkmouse()
     detectcolor.frame = frame
-    output = detectcolor.detect()
+    output = detectcolor.detect(frame)
     cv2.imshow('output',output)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
