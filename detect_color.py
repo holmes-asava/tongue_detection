@@ -121,11 +121,11 @@ class detect_color(object):
 
             output = cv2.bitwise_and(frame, frame, mask = mask)
             output_color_detec = cv2.cvtColor(output, cv2.COLOR_HSV2BGR)
-            output_color_detec = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
             #ret,output_color_detec = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
             return output_color_detec
     def center(self,frame):
-        ret,thresh = cv2.threshold(frame,80,255,cv2.THRESH_BINARY)
+        output_color_detec = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(frame, contours, -1, (0,255,0), 3)
         M = cv2.moments(thresh)
