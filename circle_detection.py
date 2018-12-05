@@ -2,7 +2,7 @@
 import numpy as np
 import argparse
 import cv2
-from PIL import Image
+#from PIL import Image
 from matplotlib import pyplot as plt
 
 cap = cv2.VideoCapture(0)
