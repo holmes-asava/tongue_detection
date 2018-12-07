@@ -11,8 +11,8 @@ def detect_circle(frame):
     #output = gray_blur
     rows = gray.shape[0]
     circles = cv2.HoughCircles(gray_blur,cv2.HOUGH_GRADIENT,1, rows / 9,
-                               param1=100, param2=30,
-                               minRadius=10, maxRadius=100)
+                               param1=100, param2=40,
+                               minRadius=10, maxRadius=70)
     if circles is not None:
         print("circle")
         circles = np.round(circles[0, :]).astype("int")

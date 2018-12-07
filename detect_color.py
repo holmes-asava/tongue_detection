@@ -1,5 +1,7 @@
 import numpy as np
 import cv2
+import colorsys
+import colorsys
 
 class detect_color(object):
     #value for make HSV boundary-------------------------------
@@ -37,14 +39,19 @@ class detect_color(object):
     def cal_color_boundaries(self):
         #height, width, channels = self.frame.shape
         #print(str(height)+"  "+str(width))
-        frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
+        frame = cv2.GaussianBlur(self.frame, (5, 5), 0)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         weight = 20
+        weight1 = 20
+        weight2 = 30
+        weight3 = 70
         self.hmin = frame[self.cor_y1,self.cor_x1,0]
         self.hmax = frame[self.cor_y1,self.cor_x1,0]
         self.smin = frame[self.cor_y1,self.cor_x1,1]
         self.smax = frame[self.cor_y1,self.cor_x1,1]
         self.vmin = frame[self.cor_y1,self.cor_x1,2]
         self.vmax = frame[self.cor_y1,self.cor_x1,2] 
+        
         if self.cor_x1 < self.cor_x2:
             x1 = self.cor_x1
             x2 = self.cor_x2
@@ -74,14 +81,19 @@ class detect_color(object):
                     self.vmin = v
                 elif v > self.vmax:
                     self.vmax = v
+        
         self.color_boundaries = [
-        ([np.clip(self.hmin - weight,0,255), np.clip(self.smin- weight,0,255), np.clip(self.vmin- weight,0,255)], 
-        [np.clip(self.hmax+ weight,0,255), np.clip(self.smax+ weight,0,255),np.clip(self.vmax+ weight,0,255)])
+        ([np.clip(self.hmin - weight1,0,255), np.clip(self.smin- weight2,0,255), np.clip(self.vmin- weight3,0,255)], 
+        [np.clip(self.hmax+ weight1,0,255), np.clip(self.smax+ weight2,0,255),np.clip(self.vmax+ weight3,0,255)])
         ]
         print(self.color_boundaries)
         cv2.destroyAllWindows()
         print("close window")
 
+    def cal_color(r,g,b):
+        h,s,v = colorsys.rgb_to_hsv(r, g, b)
+        return h,s,v
+    
     def open_cv_window(self):
         cv2.imshow('real',self.frame)
         self.checkmouse()
@@ -94,6 +106,7 @@ class detect_color(object):
             self.cor_y1 = y
             self.click = True
             #print(self.cor_x1)
+            
         elif event == cv2.EVENT_LBUTTONDOWN and self.click == True:
             #print('click2')
             self.cor_x2 = x
@@ -101,14 +114,20 @@ class detect_color(object):
             self.click = False
             #print(self.cor_x2)
             self.cal_color_boundaries()
+            cv2.circle(self.frame, (y, x), 5, (255, 255, 255), -1)
             
     #if auto = False enable mouse function        
     def checkmouse(self):
         if self.auto == False:
             cv2.setMouseCallback("real",self.click_event)
+        if self.click == True:
+            cv2.circle(self.frame, (self.cor_y1, self.cor_x1), 5, (255, 255, 255), -1)
+            cv2.putText(self.frame, "select1", (self.cor_y1-25, self.cor_x1-25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.imshow('real',self.frame)
 
     #detect color from HSV boundary and return  image
     def detect(self,frame):
+        frame = cv2.GaussianBlur(frame, (5, 5), 0)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         boundaries = self.color_boundaries
         for (lower, upper) in boundaries:
@@ -126,6 +145,7 @@ class detect_color(object):
             output_color_detec = cv2.cvtColor(output, cv2.COLOR_HSV2BGR)
             #ret,output_color_detec = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
             return output_color_detec
+
     def center(self,output,frame,x,y):
         output_color_detec = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
         ret,thresh = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
@@ -138,7 +158,7 @@ class detect_color(object):
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
             cv2.circle(frame, (cX+x, cY+y), 5, (255, 255, 255), -1)
-            cv2.putText(frame, "centroid", (cX + x - 25, cY + y - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.putText(frame, "Mark", (cX + x - 25, cY + y - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
         except:
             pass  
         return frame

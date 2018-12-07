@@ -17,7 +17,7 @@ detectdlib = detect_dlib()
 
 while(1):
     frame = detectcolor.open_camera()
-    #output = detect_circle(frame)
+    
     detectcolor.auto = False
     detectcolor.open_cv_window()
     '''
@@ -28,7 +28,8 @@ while(1):
     face_detect,x,y,w,h = detectdlib.detect_face(frame)
     output = detectcolor.detect(face_detect)
     output = detectcolor.center(output,frame,x,y)
-    cv2.imshow('face',face_detect)
+    output = detect_circle(output)
+    #cv2.imshow('face',face_detect)
     cv2.imshow('output',output)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
