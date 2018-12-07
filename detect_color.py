@@ -79,6 +79,9 @@ class detect_color(object):
         [np.clip(self.hmax+ weight,0,255), np.clip(self.smax+ weight,0,255),np.clip(self.vmax+ weight,0,255)])
         ]
         print(self.color_boundaries)
+        cv2.destroyAllWindows()
+        print("close window")
+
     def open_cv_window(self):
         cv2.imshow('real',self.frame)
         self.checkmouse()
@@ -127,6 +130,8 @@ class detect_color(object):
         output_color_detec = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
         ret,thresh = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+       # print(contours)
         #cv2.drawContours(frame, contours, -1, (0,255,0), 3)
         M = cv2.moments(thresh)
         try:
@@ -134,9 +139,7 @@ class detect_color(object):
             cY = int(M["m01"] / M["m00"])
             cv2.circle(frame, (cX+x, cY+y), 5, (255, 255, 255), -1)
             cv2.putText(frame, "centroid", (cX + x - 25, cY + y - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-            print("find")
         except:
-            print("not find")
             pass  
         return frame
 ''' 
