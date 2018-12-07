@@ -123,17 +123,17 @@ class detect_color(object):
             output_color_detec = cv2.cvtColor(output, cv2.COLOR_HSV2BGR)
             #ret,output_color_detec = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
             return output_color_detec
-    def center(self,output,frame):
+    def center(self,output,frame,x,y):
         output_color_detec = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
         ret,thresh = cv2.threshold(output_color_detec,80,255,cv2.THRESH_BINARY)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        cv2.drawContours(frame, contours, -1, (0,255,0), 3)
+        #cv2.drawContours(frame, contours, -1, (0,255,0), 3)
         M = cv2.moments(thresh)
         try:
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
-            cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
-            cv2.putText(frame, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.circle(frame, (cX+x, cY+y), 5, (255, 255, 255), -1)
+            cv2.putText(frame, "centroid", (cX + x - 25, cY + y - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             print("find")
         except:
             print("not find")
