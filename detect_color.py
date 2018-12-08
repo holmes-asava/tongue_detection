@@ -159,9 +159,10 @@ class detect_color(object):
             cY = int(M["m01"] / M["m00"])
             cv2.circle(frame, (cX+x, cY+y), 5, (255, 255, 255), -1)
             cv2.putText(frame, "Mark", (cX + x - 25, cY + y - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            return frame,cX+x,cY+y
         except:
-            pass  
-        return frame
+            return frame,0,0
+        
 ''' 
 -----------------------------------------Example Code-----------------------------------------------
 import cv2
