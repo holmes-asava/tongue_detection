@@ -5,12 +5,12 @@ import colorsys
 
 class detect_color(object):
     #value for make HSV boundary-------------------------------
-    hmin = 48 
-    hmax = 170
-    smin = 30
-    smax = 160
-    vmin = 60
-    vmax = 200
+    hmin = 79 
+    hmax =192
+    smin = 14
+    smax = 238
+    vmin = 185
+    vmax = 255
     #------------------------------------------------------------
     auto = True # check auto if False use click_event and cal_color_boundaries function
     #variable for locate mouse click location ---------------------
