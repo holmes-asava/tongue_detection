@@ -25,8 +25,8 @@ class detect_dlib(object):
             shape = face_utils.shape_to_np(shape) 
             self.nose_above=(int(shape[27][0]),int(shape[27][1]))
             self.nose_below=(int(shape[30][0]),int(shape[30][1]))
-            self.mouth_left=(int(shape[48][0]),int(shape[48][1]))
-            self.mouth_righ=(int(shape[54][0]),int(shape[54][1]))
+            self.mouth_left=(int(shape[60][0]),int(shape[60][1]))
+            self.mouth_righ=(int(shape[64][0]),int(shape[64][1]))
             (self.x,self.y,self.w,self.h) = face_utils.rect_to_bb(rect)
         cv2.rectangle(frame, (self.x,self.y), (self.x + self.w, self.y + self.h), (0, 255, 0), 2)    
         face_roi_color=frame[self.y:self.y+self.h,self.x:self.x+self.w]
