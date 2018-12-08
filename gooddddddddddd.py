@@ -13,10 +13,14 @@ from PyQt5.QtGui import *
 import cv2
 from detect_color import detect_color
 from detect_dlib  import detect_dlib
+from circle_detection import circle_detection
+import matplotlib as plt
 detectdlib   = detect_dlib()
 detectcolor = detect_color()
-
+detectcircle= circle_detection()
 class Ui_MainWindow(object):
+    data_x=[]
+    data_y=[]
     def setupUi(self, MainWindow):
         
         MainWindow.setObjectName("MainWindow")
@@ -131,10 +135,13 @@ class Ui_MainWindow(object):
             self.checkBox_Auto.setEnabled(True)   
 
     def initial_record(self):
-        self.startButton.setEnabled(True)
-        self.stopButton.setEnabled(True)
-        self.setpushButton.setEnabled(False)
-        self.setpushButton.setEnabled(False)
+        self.r =detectcircle.return_center()
+        print(self.data_x)
+        if self.r!= -1:
+            self.startButton.setEnabled(True)
+            self.stopButton.setEnabled(True)
+            self.setpushButton.setEnabled(False)
+            self.setpushButton.setEnabled(False)
 
 
        
@@ -163,35 +170,49 @@ class Ui_MainWindow(object):
             print("uncheck")
 
     def start_video(self):
-        print("video")
-        #self.capture=cv2.VideoCapture(0)
+        
+       
         self.capture = detectcolor.cap
-        print("check1")
+        
 
         self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH,640)
-        print("check2")
+        
         self.timer=QTimer()
-        print("check3")
+        
         self.timer.timeout.connect(self.update_frame)
-        print("check4")
+        
         self.timer.start(5)
-        #print("check5")
+        
 
     def update_frame(self):
         self.image= detectcolor.open_camera()
         #dlib a'Home
-        self.face,x,y,h,w=detectdlib.detect_face(self.image)
-        output= detectcolor.detect(self.face)
-        output = detectcolor.center(output,self.image,x,y)
-        print("fucK1")
-        #self.image=cv2.flip(self.image,1)
-        print("fucK2")
-        self.displayImage(output,1)
-    
-        print("fucK3")
+        state,self.face,x,y,h,w,midx,midy=detectdlib.detect_face(self.image)
+        if state==1:
+            
+            output= detectcolor.detect(self.face)
+            output,cx,cy = detectcolor.center(output,self.image,x,y)
+            output = detectcircle.detect_circle(output)
+           
+            
+            #self.image=cv2.flip(self.image,1)
+            
+            self.displayImage(output,1)
+
+            if  state==1:
+                self.data_x.append(cx-midx)
+                self.data_y.append(cy-midy)
+               
+               
+                
+                
+        else:
+            self.displayImage(self.face,1)
     def stop_video(self):
         self.timer.stop()
+        print(self.data_x)
+        
 
     def displayImage(self,imag,window=1):
         cv2.ellipse(imag, (320, 240), (90, 150), 0, 0, 360, (255,255,255), 2)
@@ -199,11 +220,11 @@ class Ui_MainWindow(object):
         cv2.line(imag,(320,280),(320,320),(255,255,255),1)
         rgbImage = cv2.cvtColor(imag, cv2.COLOR_BGR2RGB)
         self.convertToQtFormat = QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0], QImage.Format_RGB888)
-        print("FUCKFUCK1")
+        
         pixmap = QPixmap(QPixmap.fromImage(self.convertToQtFormat))
-        print("FUCKFUCK2")
+        
        # video = QLabel()
-        print("FUCKFUCK3")
+        
         #video.setPixmap(pixmap)
 
         p = self.convertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
@@ -211,12 +232,12 @@ class Ui_MainWindow(object):
         if window==1:
             
             self.video.setPixmap(QPixmap.fromImage(p))
-            print("FUCKFUCK55555")
+            
             self.video.mousePressEvent = self.getPixel
             
-            print("Hello")
+           
             #self.video.setScaledContents(true)
-            print("window")
+            
 
     def getPixel(self, event):
         print("hellofuckkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
@@ -231,7 +252,7 @@ class Ui_MainWindow(object):
         print("fuckfuck7")
         #c_rgbf = QColor(c).getRgbf()  # RGBA float: (1.0, 0.3123, 0.0, 1.0)
         print(c_rgb)
-        
+       
                   
         
    
