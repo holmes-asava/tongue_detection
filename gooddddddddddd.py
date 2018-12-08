@@ -12,6 +12,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import cv2
 from detect_color import detect_color
+from detect_dlib  import detect_dlib
+detectdlib   = detect_dlib()
 detectcolor = detect_color()
 
 class Ui_MainWindow(object):
@@ -108,6 +110,7 @@ class Ui_MainWindow(object):
 
         
         self.image=None
+        
         self.start_video()
         self.stopButton.clicked.connect(self.stop_video)
         
@@ -178,8 +181,9 @@ class Ui_MainWindow(object):
     def update_frame(self):
         self.image= detectcolor.open_camera()
         #dlib a'Home
-        output = detectcolor.detect(self.image)
-        output = detectcolor.center(output,self.image,1,1)
+        self.face,x,y,h,w=detectdlib.detect_face(self.image)
+        output= detectcolor.detect(self.face)
+        output = detectcolor.center(output,self.image,x,y)
         print("fucK1")
         #self.image=cv2.flip(self.image,1)
         print("fucK2")
