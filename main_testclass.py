@@ -3,7 +3,7 @@ import imutils
 #from detect_color import detect_color as a #เอาตัวแปรมารับclassได้เลย
 #from detect_color import detect_color
 from detect_color import detect_color
-from circle_detection import detect_circle
+from circle_detection import circle_detection
 from detect_dlib import detect_dlib
 '''
 a  = detect_color()
@@ -14,7 +14,7 @@ print(a.color_boundaries)
 '''
 detectcolor = detect_color()
 detectdlib = detect_dlib()
-
+detectcircle= circle_detection()
 while(1):
     frame = detectcolor.open_camera()
     
@@ -25,10 +25,11 @@ while(1):
     detectcolor.auto = False
     detectcolor.checkmouse()
     '''   
-    face_detect,x,y,w,h = detectdlib.detect_face(frame)
+    
+    state,face_detect,x,y,w,h,midx,midy = detectdlib.detect_face(frame)
     output = detectcolor.detect(face_detect)
-    output = detectcolor.center(output,frame,x,y)
-    output = detect_circle(output)
+    output,cx,cy = detectcolor.center(output,frame,x,y)
+    output = detectcircle.detect_circle(output)
     #cv2.imshow('face',face_detect)
     cv2.imshow('output',output)
     if cv2.waitKey(1) & 0xFF == ord('q'):
