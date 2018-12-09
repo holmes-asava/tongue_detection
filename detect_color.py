@@ -36,6 +36,7 @@ class detect_color(object):
         return self.frame
 
     #calc new HSV boundaries from area between 2 mouse click and plus/minus weight to lowest and highest
+    
     def cal_color_boundaries(self):
         #height, width, channels = self.frame.shape
         #print(str(height)+"  "+str(width))
@@ -89,6 +90,35 @@ class detect_color(object):
         print(self.color_boundaries)
         cv2.destroyAllWindows()
         print("close window")
+    
+    def cal_color_boundaries_one_point(self,r,g,b):
+        print(r)
+        print(g)
+        print(b)
+        r = r/255
+        g = g/255
+        b = b/255
+        print(r)
+        print(g)
+        print(b)
+        weight1 = 60
+        weight2 = 100
+        weight3 = 255
+        h,s,v =colorsys.rgb_to_hsv(r, g, b)
+        h=round(h*255)
+        s=round(s*255)
+        v=round(v*255)
+        print(h)
+        print(s)
+        print(v)
+        self.color_boundaries =[
+        ([np.clip(h -weight1,0,255), np.clip(s- weight2,0,255), np.clip(v- weight3,0,255)], 
+        [np.clip(h+ weight1,0,255), np.clip(s+ weight2,0,255),np.clip(v+ weight3,0,255)])
+        ]
+        print("update color threshold:")
+        print(self.color_boundaries)
+
+
 
     def cal_color(r,g,b):
         h,s,v = colorsys.rgb_to_hsv(r, g, b)

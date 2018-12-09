@@ -223,7 +223,7 @@ class Ui_MainWindow(object):
         
         pixmap = QPixmap(QPixmap.fromImage(self.convertToQtFormat))
         
-       # video = QLabel()
+        #video = QLabel()
         
         #video.setPixmap(pixmap)
 
@@ -240,18 +240,16 @@ class Ui_MainWindow(object):
             
 
     def getPixel(self, event):
-        print("hellofuckkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+        print("getPixel")
         x = event.pos().x()
         y = event.pos().y()
-        print("asud")
         c = self.convertToQtFormat.pixel(x,y)  # color code (integer): 3235912
         # depending on what kind of value you like (arbitary examples)
-        print("fuckfuck6")
         c_qobj = QColor(c)  # color object
         c_rgb = QColor(c).getRgb()  # 8bit RGBA: (255, 23, 0, 255)
-        print("fuckfuck7")
+        detectcolor.cal_color_boundaries_one_point(c_rgb[0],c_rgb[1],c_rgb[2])
         #c_rgbf = QColor(c).getRgbf()  # RGBA float: (1.0, 0.3123, 0.0, 1.0)
-        print(c_rgb)
+        
        
                   
         

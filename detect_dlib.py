@@ -38,7 +38,7 @@ class detect_dlib(object):
             face_roi_color=frame[self.y:self.y+self.h,self.x:self.x+self.w]
             self.mid_mouth_x=round((self.mouth_left[0]+self.mouth_right[0])/2)
             self.mid_mouth_y=round((self.mouth_left[1]+self.mouth_right[1])/2)
-            cv2.circle(frame, (self.mid_mouth_x, self.mid_mouth_y),2, (0, 255, 0), 4)
+            cv2.circle(frame, (self.mid_mouth_x, self.mid_mouth_y),2, (0, 0, 0), 4)
             return self.state_normal,face_roi_color,self.x,self.y,self.w,self.h,self.mid_mouth_x,self.mid_mouth_y
   
     
