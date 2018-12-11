@@ -39,12 +39,6 @@ class Ui_MainWindow(object):
         self.checkBox_Leftright = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_Leftright.setGeometry(QtCore.QRect(910, 200, 81, 17))
         self.checkBox_Leftright.setObjectName("checkBox_Leftright")
-        self.checkBox_Auto = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_Auto.setGeometry(QtCore.QRect(760, 150, 70, 17))
-        self.checkBox_Auto.setObjectName("checkBox_Auto")
-        self.checkBox_Custom = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_Custom.setGeometry(QtCore.QRect(910, 150, 70, 17))
-        self.checkBox_Custom.setObjectName("checkBox_Custom")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setGeometry(QtCore.QRect(760, 360, 113, 20))
         self.lineEdit.setText("")
@@ -75,9 +69,6 @@ class Ui_MainWindow(object):
         self.video.setFrameShape(QtWidgets.QFrame.Box)
         self.video.setText("")
         self.video.setObjectName("video")
-        self.custom = QtWidgets.QLineEdit(self.centralwidget)
-        self.custom.setGeometry(QtCore.QRect(990, 150, 41, 20))
-        self.custom.setObjectName("custom")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(720, 560, 371, 25))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -111,11 +102,10 @@ class Ui_MainWindow(object):
         self.stopButton.setEnabled(False)
         
         
-        self.checkBox_Auto.stateChanged.connect(self.changeTitle)
-
-        self.checkBox_Auto.stateChanged.connect(self.state_Auto)
-        self.checkBox_Custom.stateChanged.connect(self.state_Custom)
-
+        self.checkBox_Topbottom.toggle()
+        self.checkBox_Leftright.toggle()
+        self.checkBox_Topbottom.stateChanged.connect(self.state_TopBottom)
+        self.checkBox_Leftright.stateChanged.connect(self.state_LeftRight)
 
 
         
@@ -127,17 +117,26 @@ class Ui_MainWindow(object):
         self.startButton.clicked.connect(self.start_rec)
         self.setpushButton.clicked.connect(self.initial_record)
     
-    def state_Auto(self, int):
-        if self.checkBox_Auto.isChecked():
-            self.checkBox_Custom.setEnabled(False)
+ 
+    def state_TopBottom(self, int):
+        if self.checkBox_Topbottom.isChecked():
+            self.lineEdit.setEnabled(True)
+            self.lineEdit_3.setEnabled(True)
+            self.state_topbottom = 1
         else:
-            self.checkBox_Custom.setEnabled(True)
+           self.lineEdit.setEnabled(False)
+           self.lineEdit_3.setEnabled(False)
+           self.state_topbottom = 0
 
-    def state_Custom(self, int):
-        if self.checkBox_Custom.isChecked():
-            self.checkBox_Auto.setEnabled(False)
+    def state_LeftRight(self, int):
+        if self.checkBox_Leftright.isChecked():
+            self.lineEdit_2.setEnabled(True)
+            self.lineEdit_4.setEnabled(True)
+            self.state_leftright = 1
         else:
-            self.checkBox_Auto.setEnabled(True)   
+           self.lineEdit_2.setEnabled(False)
+           self.lineEdit_4.setEnabled(False)
+           self.state_leftright = 1
 
     def initial_record(self):
         self.r =detectcircle.return_center()
@@ -158,6 +157,7 @@ class Ui_MainWindow(object):
         self.startButton.setEnabled(False)
         self.stopButton.setEnabled(True)
         self.setpushButton.setEnabled(False)
+
     def stop_rec(self):
         self.state_rec=0
         self.startButton.setEnabled(True)
@@ -175,8 +175,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.checkBox_Topbottom.setText(_translate("MainWindow", "Top - Bottom"))
         self.checkBox_Leftright.setText(_translate("MainWindow", "Left - Right"))
-        self.checkBox_Auto.setText(_translate("MainWindow", "Auto"))
-        self.checkBox_Custom.setText(_translate("MainWindow", "Custom"))
         self.max_top.setText(_translate("MainWindow", "Max. top"))
         self.max_bottom.setText(_translate("MainWindow", "Max. bottom"))
         self.max_right.setText(_translate("MainWindow", "Max. right"))
@@ -292,7 +290,8 @@ class Ui_MainWindow(object):
         # depending on what kind of value you like (arbitary examples)
         c_qobj = QColor(c)  # color object
         c_rgb = QColor(c).getRgb()  # 8bit RGBA: (255, 23, 0, 255)
-        detectcolor.cal_color_boundaries_one_point(c_rgb[0],c_rgb[1],c_rgb[2])
+        if self.state_rec == 0:
+            detectcolor.cal_color_boundaries_one_point(c_rgb[0],c_rgb[1],c_rgb[2])
         #c_rgbf = QColor(c).getRgbf()  # RGBA float: (1.0, 0.3123, 0.0, 1.0)
         
        

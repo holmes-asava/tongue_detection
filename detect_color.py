@@ -101,19 +101,35 @@ class detect_color(object):
         print(r)
         print(g)
         print(b)
-        weight1 = 60
-        weight2 = 100
-        weight3 = 255
+        smin = 50
+        smax = 200
+        vmin = 50
+        vmax = 200
         h,s,v =colorsys.rgb_to_hsv(r, g, b)
-        h=round(h*255)
+        h=round(h*180)
         s=round(s*255)
         v=round(v*255)
         print(h)
         print(s)
         print(v)
+        #blue_range = (95,130)
+        #green_range =(38,80)
+        #red_range = (165,180)
+        if h in range(95,130):
+            hmin = 95
+            hmax = 130
+        elif h in range(38,80):
+            hmin = 38
+            hmax = 80
+        elif h in range(165,180):
+            hmin = 165
+            hmax = 180
+        else:
+            hmin = h -20
+            hmax = h +20
         self.color_boundaries =[
-        ([np.clip(h -weight1,0,255), np.clip(s- weight2,0,255), np.clip(v- weight3,0,255)], 
-        [np.clip(h+ weight1,0,255), np.clip(s+ weight2,0,255),np.clip(v+ weight3,0,255)])
+        ([np.clip(hmin,0,255), np.clip(smin,0,255), np.clip(vmin,0,255)], 
+        [np.clip(hmax,0,255), np.clip(smax,0,255),np.clip(vmax,0,255)])
         ]
         print("update color threshold:")
         print(self.color_boundaries)
