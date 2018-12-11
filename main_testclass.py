@@ -16,21 +16,24 @@ detectcolor = detect_color()
 detectdlib = detect_dlib()
 detectcircle= circle_detection()
 while(1):
-    frame = detectcolor.open_camera()
-    
-    detectcolor.auto = False
-    detectcolor.open_cv_window()
-    '''
-    detectcolor.frame = frame
-    detectcolor.auto = False
-    detectcolor.checkmouse()
-    '''   
-    
-    state,face_detect,x,y,w,h,midx,midy = detectdlib.detect_face(frame)
-    output = detectcolor.detect(face_detect)
-    output,cx,cy = detectcolor.center(output,frame,x,y)
-    output = detectcircle.detect_circle(output)
-    #cv2.imshow('face',face_detect)
-    cv2.imshow('output',output)
+    try:
+        frame = detectcolor.open_camera()
+        
+        detectcolor.auto = False
+        detectcolor.open_cv_window()
+        '''
+        detectcolor.frame = frame
+        detectcolor.auto = False
+        detectcolor.checkmouse()
+        '''   
+        
+        state,face_detect,x,y,w,h,midx,midy = detectdlib.detect_face(frame)
+        output1 = detectcolor.detect(face_detect)
+        output,cx,cy = detectcolor.center(output1,frame,x,y)
+        output = detectcircle.detect_circle(output)
+        #cv2.imshow('face',face_detect)
+        cv2.imshow('output',output1)
+    except:
+        pass
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

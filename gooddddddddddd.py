@@ -14,13 +14,19 @@ import cv2
 from detect_color import detect_color
 from detect_dlib  import detect_dlib
 from circle_detection import circle_detection
-import matplotlib as plt
+import matplotlib.pyplot as plt
 detectdlib   = detect_dlib()
 detectcolor = detect_color()
 detectcircle= circle_detection()
 class Ui_MainWindow(object):
     data_x=[]
     data_y=[]
+    #dimeter is mean radias
+    radius_ref = 25
+    max_x=0
+    min_x=0
+    max_y=0
+    min_y=0
     def setupUi(self, MainWindow):
         
         MainWindow.setObjectName("MainWindow")
@@ -116,12 +122,11 @@ class Ui_MainWindow(object):
         self.image=None
         
         self.start_video()
-        self.stopButton.clicked.connect(self.stop_video)
-        
+        self.stopButton.clicked.connect(self.stop_rec)
+        self.state_rec=0
+        self.startButton.clicked.connect(self.start_rec)
         self.setpushButton.clicked.connect(self.initial_record)
-
-        
-
+    
     def state_Auto(self, int):
         if self.checkBox_Auto.isChecked():
             self.checkBox_Custom.setEnabled(False)
@@ -136,15 +141,35 @@ class Ui_MainWindow(object):
 
     def initial_record(self):
         self.r =detectcircle.return_center()
-        print(self.data_x)
+        
         if self.r!= -1:
             self.startButton.setEnabled(True)
-            self.stopButton.setEnabled(True)
-            self.setpushButton.setEnabled(False)
-            self.setpushButton.setEnabled(False)
-
-
+            self.stopButton.setEnabled(False)
+            self.setpushButton.setEnabled(True)
+            
+    def start_rec(self):
+        self.max_x=0
+        self.min_x=0
+        self.max_x=0    
+        self.min_y=0
+        self.data_x=[]
+        self.data_y=[]
+        self.state_rec=1
+        self.startButton.setEnabled(False)
+        self.stopButton.setEnabled(True)
+        self.setpushButton.setEnabled(False)
+    def stop_rec(self):
+        self.state_rec=0
+        self.startButton.setEnabled(True)
+        self.stopButton.setEnabled(False)
+        self.setpushButton.setEnabled(True)
+        plt.plot(self.data_x)
+        plt.show()
+        plt.plot(self.data_y)
+        plt.show()
        
+    def stop_vdo(self):
+        self.timer.stop()
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -182,42 +207,62 @@ class Ui_MainWindow(object):
         
         self.timer.timeout.connect(self.update_frame)
         
-        self.timer.start(5)
+        self.timer.start(16)
         
 
     def update_frame(self):
-        self.image= detectcolor.open_camera()
-        #dlib a'Home
-        state,self.face,x,y,h,w,midx,midy=detectdlib.detect_face(self.image)
-        if state==1:
+        try:
+            self.image= detectcolor.open_camera()
+            #dlib a'Home
+            state,self.face,x,y,h,w,midx,midy=detectdlib.detect_face(self.image)
+            if state==1:
+                
+                output= detectcolor.detect(self.face)
+                output,cx,cy = detectcolor.center(output,self.image,x,y)
+                output = detectcircle.detect_circle(output)
             
-            output= detectcolor.detect(self.face)
-            output,cx,cy = detectcolor.center(output,self.image,x,y)
-            output = detectcircle.detect_circle(output)
-           
-            
-            #self.image=cv2.flip(self.image,1)
-            
-            self.displayImage(output,1)
+                
+                #self.image=cv2.flip(self.image,1)
+                
+                self.displayImage(output,1)
 
-            if  state==1:
-                self.data_x.append(cx-midx)
-                self.data_y.append(cy-midy)
-               
-               
+                if  self.state_rec==1:
+                    cur_x=(cx-midx)*self.radius_ref/self.r
+                    cur_y=(cy-midy)*self.radius_ref/self.r
+                    if(cur_x>self.max_x):
+                        if(abs(cur_x-self.max_x)<50):
+                            self.max_x=cur_x
+                    if(cur_x<self.min_x):
+                        if(abs(cur_x-self.min_x)<50):
+                            self.min_x=cur_x
+                    if(cur_y>self.max_y):
+                        if(abs(cur_y-self.max_y)<50):
+                            self.max_y=cur_y
+                    if(cur_y<self.min_y):
+                        if(abs(cur_y-self.min_y)<50):
+                           self.min_y=cur_y
+                    
+                    self.lineEdit_3.setText(str(self.max_y))
+                    self.lineEdit.setText(str(abs(self.min_y))) 
+                    self.lineEdit_2.setText(str(abs(self.min_x)))
+                    self.lineEdit_4.setText(str(self.max_x))                  
+                    self.data_x.append(cur_x)
+                    self.data_y.append(cur_y)
                 
                 
-        else:
-            self.displayImage(self.face,1)
-    def stop_video(self):
-        self.timer.stop()
-        print(self.data_x)
-        
+                    
+                    
+            else:
+                self.displayImage(self.face,1)
+        except:
+            pass
 
     def displayImage(self,imag,window=1):
+        """
         cv2.ellipse(imag, (320, 240), (90, 150), 0, 0, 360, (255,255,255), 2)
         cv2.line(imag,(270,300),(360,300),(255,255,255),1)
         cv2.line(imag,(320,280),(320,320),(255,255,255),1)
+        """
         rgbImage = cv2.cvtColor(imag, cv2.COLOR_BGR2RGB)
         self.convertToQtFormat = QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0], QImage.Format_RGB888)
         

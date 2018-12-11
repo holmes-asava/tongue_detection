@@ -5,12 +5,12 @@ import colorsys
 
 class detect_color(object):
     #value for make HSV boundary-------------------------------
-    hmin = 79 
-    hmax =192
-    smin = 14
-    smax = 238
-    vmin = 185
-    vmax = 255
+    hmin = 38
+    hmax =80
+    smin = 50
+    smax = 200
+    vmin = 50
+    vmax = 200
     #------------------------------------------------------------
     auto = True # check auto if False use click_event and cal_color_boundaries function
     #variable for locate mouse click location ---------------------
@@ -43,9 +43,9 @@ class detect_color(object):
         frame = cv2.GaussianBlur(self.frame, (5, 5), 0)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         weight = 20
-        weight1 = 20
-        weight2 = 30
-        weight3 = 70
+        weight1 = 0
+        weight2 = 0
+        weight3 = 0
         self.hmin = frame[self.cor_y1,self.cor_x1,0]
         self.hmax = frame[self.cor_y1,self.cor_x1,0]
         self.smin = frame[self.cor_y1,self.cor_x1,1]
@@ -84,8 +84,8 @@ class detect_color(object):
                     self.vmax = v
         
         self.color_boundaries = [
-        ([np.clip(self.hmin - weight1,0,255), np.clip(self.smin- weight2,0,255), np.clip(self.vmin- weight3,0,255)], 
-        [np.clip(self.hmax+ weight1,0,255), np.clip(self.smax+ weight2,0,255),np.clip(self.vmax+ weight3,0,255)])
+        ([np.clip(self.hmin - weight1,0,500), np.clip(self.smin- weight2,0,500), np.clip(self.vmin- weight3,0,500)], 
+        [np.clip(self.hmax+ weight1,0,500), np.clip(self.smax+ weight2,0,500),np.clip(self.vmax+ weight3,0,500)])
         ]
         print(self.color_boundaries)
         cv2.destroyAllWindows()
@@ -167,8 +167,8 @@ class detect_color(object):
             kernel_close = np.ones((30,30),np.uint8)
             mask = cv2.inRange(frame, lower, upper)
             
-            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_open)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel_close)
+            #mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_open)
+            #mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel_close)
             #mask = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
 
             output = cv2.bitwise_and(frame, frame, mask = mask)

@@ -34,7 +34,7 @@ class detect_dlib(object):
             self.mouth_left=(int(shape[60][0]),int(shape[60][1]))
             self.mouth_right=(int(shape[64][0]),int(shape[64][1]))
             (self.x,self.y,self.w,self.h) = face_utils.rect_to_bb(rect)
-            cv2.rectangle(frame, (self.x,self.y), (self.x + self.w, self.y + self.h), (0, 255, 0), 2)    
+            cv2.rectangle(frame, (self.x,self.y), (self.x + self.w, self.y + self.h), (255, 255,255), 2)    
             face_roi_color=frame[self.y:self.y+self.h,self.x:self.x+self.w]
             self.mid_mouth_x=round((self.mouth_left[0]+self.mouth_right[0])/2)
             self.mid_mouth_y=round((self.mouth_left[1]+self.mouth_right[1])/2)
