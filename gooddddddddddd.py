@@ -141,11 +141,12 @@ class Ui_MainWindow(object):
 
     def initial_record(self):
         self.r =detectcircle.return_center()
-        
         if self.r!= -1:
             self.startButton.setEnabled(True)
             self.stopButton.setEnabled(False)
             self.setpushButton.setEnabled(True)
+            self.ref_x=0
+            self.ref_y=0
             
     def start_rec(self):
         self.max_x=0
@@ -226,20 +227,29 @@ class Ui_MainWindow(object):
                 
                 self.displayImage(output,1)
 
-                if  self.state_rec==1:
+                if  (0<self.state_rec<10):
+                    cur_x=(cx-midx)*self.radius_ref/self.r
+                    cur_y=(cy-midy)*self.radius_ref/self.r
+                    self.ref_x=cur_x+self.ref_x
+                    self.ref_y=cur_y+self.ref_y
+                    
+                    
+                elif(self.state_rec=10):
+                    self.ref_x=self.ref_x/10
+                    self.ref_y=self.ref_y/10
                     cur_x=(cx-midx)*self.radius_ref/self.r
                     cur_y=(cy-midy)*self.radius_ref/self.r
                     if(cur_x>self.max_x):
-                        if(abs(cur_x-self.max_x)<50):
+                        if(abs(cur_x-self.ref_x)<50):
                             self.max_x=cur_x
                     if(cur_x<self.min_x):
-                        if(abs(cur_x-self.min_x)<50):
+                        if(abs(cur_x-self.ref_x)<50):
                             self.min_x=cur_x
                     if(cur_y>self.max_y):
-                        if(abs(cur_y-self.max_y)<50):
+                        if(abs(cur_y-self.ref_y)<50):
                             self.max_y=cur_y
                     if(cur_y<self.min_y):
-                        if(abs(cur_y-self.min_y)<50):
+                        if(abs(cur_y-self.ref_y)<50):
                            self.min_y=cur_y
                     
                     self.lineEdit_3.setText(str(self.max_y))
@@ -248,6 +258,42 @@ class Ui_MainWindow(object):
                     self.lineEdit_4.setText(str(self.max_x))                  
                     self.data_x.append(cur_x)
                     self.data_y.append(cur_y)
+                    self.old_x=cur_x
+                    self.old_y=cur_y
+                    state_rec=11
+                elif(self.state_rec=11):
+                    cur_x=(cx-midx)*self.radius_ref/self.r
+                    cur_y=(cy-midy)*self.radius_ref/self.r
+                    if(cur_x>self.max_x):
+                        if(abs(cur_x-self.ref_x)<50):
+                            self.max_x=cur_x
+                        else:
+                            cur_x= self.old_x
+                          
+                    if(cur_x<self.min_x):
+                        if(abs(cur_x-self.ref_x)<50):
+                            self.min_x=cur_x
+                        else:
+                            cur_x= self.old_x
+                    if(cur_y>self.max_y):
+                        if(abs(cur_y-self.ref_y)<50):
+                            self.max_y=cur_y
+                         else:
+                            cur_y= self.old_y   
+                    if(cur_y<self.min_y):
+                        if(abs(cur_y-self.ref_y)<50):
+                           self.min_y=cur_y
+                        else:
+                            cur_y= self.old_y
+                    self.lineEdit_3.setText(str(self.max_y))
+                    self.lineEdit.setText(str(abs(self.min_y))) 
+                    self.lineEdit_2.setText(str(abs(self.min_x)))
+                    self.lineEdit_4.setText(str(self.max_x))                  
+                    self.data_x.append(cur_x)
+                    self.data_y.append(cur_y)
+                    self.old_x=cur_x
+                    self.old_y=cur_y
+                
                 
                 
                     
