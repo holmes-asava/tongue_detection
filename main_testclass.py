@@ -32,7 +32,7 @@ while(1):
         output,cx,cy = detectcolor.center(output1,frame,x,y)
         output = detectcircle.detect_circle(output)
         #cv2.imshow('face',face_detect)
-        cv2.imshow('output',output1)
+        cv2.imshow('output',face_detect)
     except:
         pass
     if cv2.waitKey(1) & 0xFF == ord('q'):

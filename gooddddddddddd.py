@@ -100,8 +100,8 @@ class Ui_MainWindow(object):
 
         self.startButton.setEnabled(False)
         self.stopButton.setEnabled(False)
-        
-        
+        self.state_topbottom = 1
+        self.state_leftright = 1
         self.checkBox_Topbottom.toggle()
         self.checkBox_Leftright.toggle()
         self.checkBox_Topbottom.stateChanged.connect(self.state_TopBottom)
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
         else:
            self.lineEdit_2.setEnabled(False)
            self.lineEdit_4.setEnabled(False)
-           self.state_leftright = 1
+           self.state_leftright = 0
 
     def initial_record(self):
         self.r =detectcircle.return_center()
@@ -224,15 +224,15 @@ class Ui_MainWindow(object):
                 #self.image=cv2.flip(self.image,1)
                 
                 self.displayImage(output,1)
-
-                if  (0<self.state_rec<10):
+                
+                if  (0<self.state_rec<11):
                     cur_x=(cx-midx)*self.radius_ref/self.r
                     cur_y=(cy-midy)*self.radius_ref/self.r
                     self.ref_x=cur_x+self.ref_x
                     self.ref_y=cur_y+self.ref_y
+                    self.state_rec=self.state_rec+1
                     
-                    
-                elif(self.state_rec=10):
+                elif(self.state_rec==11):
                     self.ref_x=self.ref_x/10
                     self.ref_y=self.ref_y/10
                     cur_x=(cx-midx)*self.radius_ref/self.r
@@ -250,16 +250,18 @@ class Ui_MainWindow(object):
                         if(abs(cur_y-self.ref_y)<50):
                            self.min_y=cur_y
                     
-                    self.lineEdit_3.setText(str(self.max_y))
-                    self.lineEdit.setText(str(abs(self.min_y))) 
-                    self.lineEdit_2.setText(str(abs(self.min_x)))
-                    self.lineEdit_4.setText(str(self.max_x))                  
-                    self.data_x.append(cur_x)
-                    self.data_y.append(cur_y)
+                    if(self.state_topbottom):
+                        self.lineEdit_3.setText(str(self.max_y))
+                        self.lineEdit.setText(str(abs(self.min_y)))
+                        self.data_y.append(cur_y)
+                    if(self.state_leftright): 
+                        self.lineEdit_2.setText(str(abs(self.min_x)))
+                        self.lineEdit_4.setText(str(self.max_x))                  
+                        self.data_x.append(cur_x)
                     self.old_x=cur_x
                     self.old_y=cur_y
-                    state_rec=11
-                elif(self.state_rec=11):
+                    state_rec=12
+                elif(self.state_rec==12):
                     cur_x=(cx-midx)*self.radius_ref/self.r
                     cur_y=(cy-midy)*self.radius_ref/self.r
                     if(cur_x>self.max_x):
@@ -276,19 +278,24 @@ class Ui_MainWindow(object):
                     if(cur_y>self.max_y):
                         if(abs(cur_y-self.ref_y)<50):
                             self.max_y=cur_y
-                         else:
+                        else:
                             cur_y= self.old_y   
                     if(cur_y<self.min_y):
                         if(abs(cur_y-self.ref_y)<50):
                            self.min_y=cur_y
                         else:
                             cur_y= self.old_y
-                    self.lineEdit_3.setText(str(self.max_y))
-                    self.lineEdit.setText(str(abs(self.min_y))) 
-                    self.lineEdit_2.setText(str(abs(self.min_x)))
-                    self.lineEdit_4.setText(str(self.max_x))                  
-                    self.data_x.append(cur_x)
-                    self.data_y.append(cur_y)
+                    if(self.state_topbottom):
+                        
+                        self.lineEdit_3.setText("%.2f",(self.max_y))
+                        self.lineEdit.setText("%.2f",(abs(self.min_y)))
+                        self.data_y.append(cur_y)
+                    if(self.state_leftright): 
+                        
+                        self.lineEdit_2.setText("%.2f",(self.max_x))
+                        self.lineEdit_4.setText("%.2f",(abs(self.min_x)))                
+                        self.data_x.append(cur_x)
+                    
                     self.old_x=cur_x
                     self.old_y=cur_y
                 
