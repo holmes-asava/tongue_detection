@@ -262,12 +262,12 @@ class Ui_MainWindow(object):
                            self.min_y=cur_y
                     
                     if(self.state_topbottom):
-                        self.lineEdit_3.setText(str(self.max_y))
-                        self.lineEdit.setText(str(abs(self.min_y)))
+                        self.lineEdit_3.setText("%.2f" %(self.max_y))
+                        self.lineEdit.setText("%.2f" %(abs(self.min_y)))
                         self.data_y.append(cur_y)
                     if(self.state_leftright): 
-                        self.lineEdit_2.setText(str(abs(self.min_x)))
-                        self.lineEdit_4.setText(str(self.max_x))                  
+                        self.lineEdit_2.setText("%.2f" %(abs(self.min_x)))
+                        self.lineEdit_4.setText("%.2f" %(self.max_x))                  
                         self.data_x.append(cur_x)
                     self.old_x=cur_x
                     self.old_y=cur_y
@@ -298,13 +298,13 @@ class Ui_MainWindow(object):
                             cur_y= self.old_y
                     if(self.state_topbottom):
                         
-                        self.lineEdit_3.setText("%.2f",(self.max_y))
-                        self.lineEdit.setText("%.2f",(abs(self.min_y)))
+                        self.lineEdit_3.setText("%.2f" %(self.max_y))
+                        self.lineEdit.setText("%.2f"%(abs(self.min_y)))
                         self.data_y.append(cur_y)
                     if(self.state_leftright): 
                         
-                        self.lineEdit_2.setText("%.2f",(self.max_x))
-                        self.lineEdit_4.setText("%.2f",(abs(self.min_x)))                
+                        self.lineEdit_2.setText("%.2f"%(self.max_x))
+                        self.lineEdit_4.setText("%.2f"%(abs(self.min_x)))                
                         self.data_x.append(cur_x)
                     
                     self.old_x=cur_x
