@@ -174,6 +174,8 @@ class Ui_MainWindow(object):
         self.startButton.setEnabled(True)
         self.stopButton.setEnabled(False)
         self.setpushButton.setEnabled(True)
+        #filter
+
         plt.plot(self.data_x)
         plt.show()
         plt.plot(self.data_y)
@@ -264,7 +266,7 @@ class Ui_MainWindow(object):
                     if(self.state_topbottom):
                         self.lineEdit_3.setText("%.2f" %(self.max_y))
                         self.lineEdit.setText("%.2f" %(abs(self.min_y)))
-                        self.data_y.append(cur_y)
+                        self.data_y.append(-cur_y)
                     if(self.state_leftright): 
                         self.lineEdit_2.setText("%.2f" %(abs(self.min_x)))
                         self.lineEdit_4.setText("%.2f" %(self.max_x))                  
@@ -273,8 +275,13 @@ class Ui_MainWindow(object):
                     self.old_y=cur_y
                     state_rec=12
                 elif(self.state_rec==12):
-                    cur_x=(cx-midx)*self.radius_ref/self.r
-                    cur_y=(cy-midy)*self.radius_ref/self.r
+                    if cx ==0 or cy==0:
+                        cur_x=self.old_x
+                        cur_y=self.old_y
+                    else:
+                        cur_x=(cx-midx)*self.radius_ref/self.r
+                        cur_y=(cy-midy)*self.radius_ref/self.r
+
                     if(cur_x>self.max_x):
                         if(abs(cur_x-self.ref_x)<50):
                             self.max_x=cur_x
@@ -300,7 +307,7 @@ class Ui_MainWindow(object):
                         
                         self.lineEdit_3.setText("%.2f" %(self.max_y))
                         self.lineEdit.setText("%.2f"%(abs(self.min_y)))
-                        self.data_y.append(cur_y)
+                        self.data_y.append(-cur_y)
                     if(self.state_leftright): 
                         
                         self.lineEdit_2.setText("%.2f"%(self.max_x))
