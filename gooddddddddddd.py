@@ -15,6 +15,8 @@ from detect_color import detect_color
 from detect_dlib  import detect_dlib
 from circle_detection import circle_detection
 import matplotlib.pyplot as plt
+import numpy as np
+import scipy.signal
 detectdlib   = detect_dlib()
 detectcolor = detect_color()
 detectcircle= circle_detection()
@@ -175,10 +177,15 @@ class Ui_MainWindow(object):
         self.stopButton.setEnabled(False)
         self.setpushButton.setEnabled(True)
         #filter
-
-        plt.plot(self.data_x)
+        x_sm = np.array(self.data_x)
+        y_sm = np.array(self.data_x)
+        xnew = scipy.signal.savgol_filter(x_sm, 5, 3)
+        ynew = scipy.signal.savgol_filter(y_sm, 5, 3)
+        #x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
+        #y_smooth = spline(x, y, x_smooth)
+        plt.plot(xnew)
         plt.show()
-        plt.plot(self.data_y)
+        plt.plot(ynew)
         plt.show()
        
     def stop_vdo(self):
