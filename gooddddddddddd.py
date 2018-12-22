@@ -155,6 +155,16 @@ class Ui_MainWindow(object):
         self.data_x=[]
         self.data_y=[]
         self.state_rec=1
+        if(self.state_topbottom):
+                        
+            self.lineEdit_3.setText("0")
+            self.lineEdit.setText("0")
+            
+        if(self.state_leftright): 
+                        
+            self.lineEdit_2.setText("0")
+            self.lineEdit_4.setText("0")                
+            
         self.startButton.setEnabled(False)
         self.stopButton.setEnabled(True)
         self.setpushButton.setEnabled(False)
@@ -222,6 +232,7 @@ class Ui_MainWindow(object):
             
                 
                 #self.image=cv2.flip(self.image,1)
+                
                 
                 self.displayImage(output,1)
                 
