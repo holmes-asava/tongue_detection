@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import cv2
 from detect_color import detect_color
-#from detect_dlib  import detect_dlib
+from detect_dlib  import detect_dlib
 from circle_detection import circle_detection
 import matplotlib.pyplot as plt
 import numpy as np
