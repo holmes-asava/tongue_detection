@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import cv2
 from detect_color import detect_color
-from detect_dlib  import detect_dlib
+#from detect_dlib  import detect_dlib
 from circle_detection import circle_detection
 import matplotlib.pyplot as plt
 import numpy as np
@@ -107,12 +107,8 @@ class Ui_MainWindow(object):
         self.checkBox_Topbottom.toggle()
         self.checkBox_Leftright.toggle()
         self.checkBox_Topbottom.stateChanged.connect(self.state_TopBottom)
-        self.checkBox_Leftright.stateChanged.connect(self.state_LeftRight)
-
-
-        
-        self.image=None
-        
+        self.checkBox_Leftright.stateChanged.connect(self.state_LeftRight)    
+        self.image=None        
         self.start_video()
         self.stopButton.clicked.connect(self.stop_rec)
         self.state_rec=0
@@ -120,7 +116,7 @@ class Ui_MainWindow(object):
         self.setpushButton.clicked.connect(self.initial_record)
     
  
-    def state_TopBottom(self, int):
+    def state_TopBottom(self, int): #CHECK STATE
         if self.checkBox_Topbottom.isChecked():
             self.lineEdit.setEnabled(True)
             self.lineEdit_3.setEnabled(True)
@@ -199,19 +195,10 @@ class Ui_MainWindow(object):
         self.max_bottom.setText(_translate("MainWindow", "Max. bottom"))
         self.max_right.setText(_translate("MainWindow", "Max. right"))
         self.max_left.setText(_translate("MainWindow", "Max. left"))
-        self.setpushButton.setText(_translate("MainWindow", "SET"))
-        self.startButton.setText(_translate("MainWindow", "START"))
-        self.stopButton.setText(_translate("MainWindow", "STOP"))
-        
-    def changeTitle(self, state):
-        _translate = QtCore.QCoreApplication.translate
-        if state == Qt.Checked:
-            self.lineEdit.setText(_translate("MainWindow", "hello"))
-            print("check")
-        else:
-            self.lineEdit.setText(_translate("MainWindow", "555"))
-            print("uncheck")
-
+        self.setpushButton.setText(_translate("MainWindow", "CALIBRATION"))
+        self.startButton.setText(_translate("MainWindow", "START RECORD"))
+        self.stopButton.setText(_translate("MainWindow", "STOP RECORD"))
+   
     def start_video(self):
         
        
