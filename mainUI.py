@@ -115,7 +115,7 @@ class Ui_MainWindow(object):
         self.startButton.clicked.connect(self.start_rec)
         self.setpushButton.clicked.connect(self.initial_record)
     
- 
+    
     def state_TopBottom(self, int): #CHECK STATE
         if self.checkBox_Topbottom.isChecked():
             self.lineEdit.setEnabled(True)
@@ -142,10 +142,11 @@ class Ui_MainWindow(object):
             self.startButton.setEnabled(True)
             self.stopButton.setEnabled(False)
             self.setpushButton.setEnabled(True)
-            self.ref_x=0
-            self.ref_y=0
+            
             
     def start_rec(self):
+        self.ref_x=0
+        self.ref_y=0
         self.max_x=0
         self.min_x=0
         self.max_x=0    
@@ -321,9 +322,7 @@ class Ui_MainWindow(object):
         pixmap = QPixmap(QPixmap.fromImage(self.convertToQtFormat))
         p = self.convertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
         if window==1:
-              self.video
             self.video.setPixmap(QPixmap.fromImage(p))
-            
             self.video.mousePressEvent = self.getPixel
 
 
