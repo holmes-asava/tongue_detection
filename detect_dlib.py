@@ -37,7 +37,8 @@ class detect_dlib(object):
             cv2.rectangle(frame, (self.x,self.y), (self.x + self.w, self.y + self.h), (255, 255,255), 2)    
             face_roi_color=frame[self.y:self.y+self.h,self.x:self.x+self.w]
             self.mid_mouth_x=round((self.mouth_left[0]+self.mouth_right[0])/2)
-            self.mid_mouth_y=round((self.mouth_left[1]+self.mouth_right[1])/2)
+            self.mid_mouth_y= self.nose_below
+            #self.mid_mouth_y=round((self.mouth_left[1]+self.mouth_right[1])/2)
             #cv2.circle(frame, (self.mid_mouth_x, self.mid_mouth_y),2, (0, 0, 0), 4)
             if(self.x<0):
                 print(self.x)
