@@ -242,19 +242,19 @@ class Ui_MainWindow(object):
                 elif(self.state_rec==11):
                     self.ref_x=self.ref_x/10
                     self.ref_y=self.ref_y/10
-                    cur_x=(cx-midx)*self.radius_ref/self.r
-                    cur_y=(cy-midy)*self.radius_ref/self.r
+                    cur_x=(cx-midx-self.ref_x)*self.radius_ref/self.r
+                    cur_y=(cy-midy-self.ref_y)*self.radius_ref/self.r
                     if(cur_x>self.max_x):
-                        if(abs(cur_x-self.ref_x)<50):
+                        if(abs(cur_x)<50):
                             self.max_x=cur_x
                     if(cur_x<self.min_x):
-                        if(abs(cur_x-self.ref_x)<50):
+                        if(abs(cur_x)<50):
                             self.min_x=cur_x
                     if(cur_y>self.max_y):
-                        if(abs(cur_y-self.ref_y)<50):
+                        if(abs(cur_y)<50):
                             self.max_y=cur_y
                     if(cur_y<self.min_y):
-                        if(abs(cur_y-self.ref_y)<50):
+                        if(abs(cur_y)<50):
                            self.min_y=cur_y
                     
                     if(self.state_topbottom):
@@ -267,33 +267,33 @@ class Ui_MainWindow(object):
                         self.data_x.append(cur_x)
                     self.old_x=cur_x
                     self.old_y=cur_y
-                    state_rec=12
+                    self.state_rec=12
                 elif(self.state_rec==12):
                     if cx ==0 or cy==0:
                         cur_x=self.old_x
                         cur_y=self.old_y
                     else:
-                        cur_x=(cx-midx)*self.radius_ref/self.r
-                        cur_y=(cy-midy)*self.radius_ref/self.r
+                        cur_x=(cx-midx-self.ref_x)*self.radius_ref/self.r
+                        cur_y=(cy-midy-self.ref_y)*self.radius_ref/self.r
 
                     if(cur_x>self.max_x):
-                        if(abs(cur_x-self.ref_x)<50):
+                        if(abs(cur_x)<50):
                             self.max_x=cur_x
                         else:
                             cur_x= self.old_x
                           
                     if(cur_x<self.min_x):
-                        if(abs(cur_x-self.ref_x)<50):
+                        if(abs(cur_x)<50):
                             self.min_x=cur_x
                         else:
                             cur_x= self.old_x
                     if(cur_y>self.max_y):
-                        if(abs(cur_y-self.ref_y)<50):
+                        if(abs(cur_y)<50):
                             self.max_y=cur_y
                         else:
                             cur_y= self.old_y   
                     if(cur_y<self.min_y):
-                        if(abs(cur_y-self.ref_y)<50):
+                        if(abs(cur_y)<50):
                            self.min_y=cur_y
                         else:
                             cur_y= self.old_y
