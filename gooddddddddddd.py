@@ -242,8 +242,8 @@ class Ui_MainWindow(object):
                 elif(self.state_rec==11):
                     self.ref_x=self.ref_x/10
                     self.ref_y=self.ref_y/10
-                    cur_x=(cx-midx-self.ref_x)*self.radius_ref/self.r
-                    cur_y=(cy-midy-self.ref_y)*self.radius_ref/self.r
+                    cur_x=(cx-midx)*self.radius_ref/self.r-self.ref_x
+                    cur_y=(cy-midy)*self.radius_ref/self.r-self.ref_y
                     if(cur_x>self.max_x):
                         if(abs(cur_x)<50):
                             self.max_x=cur_x
@@ -272,9 +272,10 @@ class Ui_MainWindow(object):
                     if cx ==0 or cy==0:
                         cur_x=self.old_x
                         cur_y=self.old_y
+
                     else:
-                        cur_x=(cx-midx-self.ref_x)*self.radius_ref/self.r
-                        cur_y=(cy-midy-self.ref_y)*self.radius_ref/self.r
+                        cur_x=(cx-midx)*self.radius_ref/self.r-self.ref_x
+                        cur_y=(cy-midy)*self.radius_ref/self.r-self.ref_y
 
                     if(cur_x>self.max_x):
                         if(abs(cur_x)<50):

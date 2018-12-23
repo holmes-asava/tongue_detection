@@ -38,7 +38,7 @@ class detect_dlib(object):
             face_roi_color=frame[self.y:self.y+self.h,self.x:self.x+self.w]
             self.mid_mouth_x=round((self.mouth_left[0]+self.mouth_right[0])/2)
             self.mid_mouth_y=self.nose_below[1]
-            #cv2.circle(frame, (self.mid_mouth_x, self.mid_mouth_y),2, (0, 0, 0), 4)
+            #cv2.circle(frame, (self.nose_below),2, (0, 0, 0), 4)
             if(self.x<0):
                 print(self.x)
                 return self.state_error,frame,0,0,1,1,0,0
